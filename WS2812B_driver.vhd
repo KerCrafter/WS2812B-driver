@@ -28,7 +28,8 @@ use ieee.numeric_std.all;
 entity NRZ_sequence is
 	generic (
 		duration_clk_counts : integer;
-		high_duration_clk_counts : integer
+		code_0_high_duration_clk_counts : integer;
+		code_1_high_duration_clk_counts : integer
 	);
 	
 	port (
@@ -91,7 +92,8 @@ begin
 	NRZ_sequence : entity work.NRZ_sequence
 		generic map(
 			duration_clk_counts => 62,
-			high_duration_clk_counts => 39
+			code_1_high_duration_clk_counts => 39,
+			code_0_high_duration_clk_counts => 19
 		)
 		port map (
 			clk => clk,
