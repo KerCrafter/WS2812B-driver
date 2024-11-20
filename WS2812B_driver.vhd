@@ -120,8 +120,6 @@ begin
 					if step = step_max then
 						step <= 0;
 						
-						seq_trigger <= '1';
-						
 						if bit_proceed = bit_proceed_max then
 							bit_proceed <= 0;
 							
@@ -133,6 +131,8 @@ begin
 								program_led_number <= program_led_number + 1;
 							end if;
 						else
+							seq_trigger <= '1';
+
 							bit_proceed <= bit_proceed + 1;
 						end if;
 					else
@@ -143,6 +143,8 @@ begin
 				
 				when ValidateSeq =>
 					if update_frame = '1' then
+						seq_trigger <= '1';
+
 						stage <= SendLEDsData;
 					end if;
 
