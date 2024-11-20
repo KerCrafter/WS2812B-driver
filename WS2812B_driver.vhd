@@ -72,8 +72,7 @@ begin
 		end if;
 	end process;
 
-	sequence <= bit_to_code;
-	--sequence <= '1' when step <= 19 and is_start = '1' else '0';
+	sequence <= '1' when ((bit_to_code = '0' and step <= 19) or (bit_to_code = '1' and step <= 39)) and is_start = '1' else '0';
 	
 end architecture;
 
@@ -155,6 +154,7 @@ begin
 						
 						if bit_proceed = bit_proceed_max then
 							bit_proceed <= 0;
+							seq_bit_to_code <= data(0);
 							
 							if program_led_number = max_pos-1 then
 								program_led_number <= 0;
