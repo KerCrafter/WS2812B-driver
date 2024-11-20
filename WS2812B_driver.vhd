@@ -39,7 +39,7 @@ entity NRZ_sequence is
 		trigger : in std_logic;
 		finished : in std_logic;
 		bit_to_code : in std_logic;
-		sequence : out std_logic
+		sequence : out std_logic := '0'
 	);
 
 end entity;
@@ -129,7 +129,7 @@ begin
 			trigger => seq_trigger,
 			finished => seq_finished,
 			bit_to_code => seq_bit_to_code,
-			sequence => seq_sequence
+			sequence => leds_line
 		);
 
 	process(clk)
@@ -188,13 +188,5 @@ begin
 		end if;
 
 	end process;
-	
-	leds_line <= serial_state_led_line_for_color(
-		bit_proceed => bit_proceed,
-		step => step,
-		green => program_green_intensity,
-		red => program_red_intensity,
-		blue => program_blue_intensity
-	) when stage = SendLEDsData else '0';
 
 end architecture;
