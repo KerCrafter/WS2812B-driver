@@ -12,6 +12,8 @@ entity WS2812B_driver is
 		enable : in std_logic;
 		leds_line : out std_logic := '0';
 		
+		seq_sequence : out std_logic := '0';
+		
 		update_frame : in std_logic;
 		
 		program_led_number : buffer integer range 0 to max_pos-1;
@@ -63,7 +65,6 @@ architecture beh of WS2812B_driver is
 	signal seq_trigger : std_logic;
 	signal seq_finished : std_logic;
 	signal seq_bit_to_code : std_logic;
-	signal seq_sequence : std_logic;	
 	
 	constant HIGH_DURATION_FOR_CODE_1 : integer := 39;
 	constant HIGH_DURATION_FOR_CODE_0 : integer := 19;
