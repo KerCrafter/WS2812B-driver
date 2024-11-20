@@ -67,17 +67,13 @@ begin
 				else
 					step <= step + 1;
 					
-					if step < 19 then
-						sequence <= '1';
-					else
-						sequence <= '0';
-					end if;
-					
 				end if;
 			end if;
 		end if;
 	end process;
 
+	sequence <= '1' when step <= 19 and is_start = '1' else '0';
+	
 end architecture;
 
 
