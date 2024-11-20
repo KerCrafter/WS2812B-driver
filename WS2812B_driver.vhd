@@ -35,6 +35,7 @@ entity NRZ_sequence is
 		clk : in std_logic;
 		trigger : in std_logic;
 		finished : in std_logic;
+		bit_to_code : in std_logic;
 		sequence : out std_logic
 	);
 
@@ -58,12 +59,10 @@ architecture beh of WS2812B_driver is
 	
 	signal stage : std_logic_vector(0 to 1) := WaitStart;
 	
-	signal code_0_trigger : std_logic;
-	signal code_0_finished : std_logic;
-	signal code_0_sequence : std_logic;
-	
-	signal code_1_sequence : std_logic;
-	
+	signal seq_trigger : std_logic;
+	signal seq_finished : std_logic;
+	signal seq_bit_to_code : std_logic;
+	signal seq_sequence : std_logic;	
 	
 	constant HIGH_DURATION_FOR_CODE_1 : integer := 39;
 	constant HIGH_DURATION_FOR_CODE_0 : integer := 19;
@@ -89,28 +88,17 @@ architecture beh of WS2812B_driver is
 		end if;
 	end function;
 begin
-	NRZ_code_1 : entity work.NRZ_sequence
+	NRZ_sequence : entity work.NRZ_sequence
 		generic map(
 			duration_clk_counts => 62,
 			high_duration_clk_counts => 39
 		)
 		port map (
 			clk => clk,
-			trigger => '0', --todo,
-			finished => '0', --todo
-			sequence => code_1_sequence
-		);
-		
-	NRZ_code_0 : entity work.NRZ_sequence
-		generic map(
-			duration_clk_counts => 62,
-			high_duration_clk_counts => 19
-		)
-		port map (
-			clk => clk,
-			trigger => code_0_trigger,
-			finished => code_0_finished,
-			sequence => code_0_sequence
+			trigger => seq_trigger,
+			finished => seq_finished,
+			bit_to_code => seq_bit_to_code,
+			sequence => seq_sequence
 		);
 
 	process(clk)
