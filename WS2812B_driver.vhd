@@ -110,12 +110,16 @@ begin
 		if rising_edge(clk) then
 			case stage is
 				when WaitStart =>
+					seq_trigger <= '0';
+				
 					if enable = '1' then
 						stage <= SendLEDsData;
 					end if;		
 				when SendLEDsData =>
 					if step = step_max then
 						step <= 0;
+						
+						seq_trigger <= '1';
 						
 						if bit_proceed = bit_proceed_max then
 							bit_proceed <= 0;
@@ -131,14 +135,9 @@ begin
 							bit_proceed <= bit_proceed + 1;
 						end if;
 					else
-					
-						if step = 0 then
-							seq_trigger <= '1';
-						else
-							seq_trigger <= '0';
-						end if;
-					
 						step <= step + 1;
+						
+						seq_trigger <= '0';
 					end if;
 				
 				when ValidateSeq =>
