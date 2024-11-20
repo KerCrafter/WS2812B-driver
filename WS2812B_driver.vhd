@@ -72,7 +72,8 @@ begin
 		end if;
 	end process;
 
-	sequence <= '1' when step <= 19 and is_start = '1' else '0';
+	sequence <= bit_to_code;
+	--sequence <= '1' when step <= 19 and is_start = '1' else '0';
 	
 end architecture;
 
@@ -133,7 +134,11 @@ begin
 		);
 
 	process(clk)
+		variable data :  std_logic_vector(0 to bit_proceed_max);
 	begin
+	
+		data := std_logic_vector( to_unsigned( program_green_intensity, 8)) & std_logic_vector( to_unsigned( program_red_intensity, 8)) & std_logic_vector( to_unsigned( program_blue_intensity, 8));
+	
 		if rising_edge(clk) then
 			case stage is
 				when WaitStart =>
@@ -141,6 +146,7 @@ begin
 				
 					if enable = '1' then
 						seq_trigger <= '1';
+						seq_bit_to_code <= data(bit_proceed);
 						stage <= SendLEDsData;
 					end if;		
 				when SendLEDsData =>
@@ -161,6 +167,7 @@ begin
 							seq_trigger <= '1';
 
 							bit_proceed <= bit_proceed + 1;
+							seq_bit_to_code <= data(bit_proceed + 1);
 						end if;
 					else
 						step <= step + 1;
