@@ -46,6 +46,7 @@ end entity;
 
 architecture behavior of NRZ_sequence is
 begin
+	sequence <= trigger;
 end architecture;
 
 
@@ -130,6 +131,13 @@ begin
 							bit_proceed <= bit_proceed + 1;
 						end if;
 					else
+					
+						if step = 0 then
+							seq_trigger <= '1';
+						else
+							seq_trigger <= '0';
+						end if;
+					
 						step <= step + 1;
 					end if;
 				
