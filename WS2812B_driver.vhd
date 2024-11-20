@@ -45,8 +45,39 @@ entity NRZ_sequence is
 end entity;
 
 architecture behavior of NRZ_sequence is
+	signal step : integer range 0 to duration_clk_counts := 0;
+	signal is_start : std_logic := '0';
 begin
-	sequence <= trigger;
+
+	process(trigger)
+	begin
+		if rising_edge(trigger) then
+			is_start <= '1';
+		end if;
+	end process;
+
+	process(clk)
+	begin
+		if rising_edge(clk) then
+			if is_start = '1' then
+			
+				if step = duration_clk_counts then
+					step <= 0;
+					--is_start <= '0';
+				else
+					step <= step + 1;
+					
+					if step < 19 then
+						sequence <= '1';
+					else
+						sequence <= '0';
+					end if;
+					
+				end if;
+			end if;
+		end if;
+	end process;
+
 end architecture;
 
 
