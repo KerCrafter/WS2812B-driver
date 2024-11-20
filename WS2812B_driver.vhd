@@ -21,6 +21,28 @@ entity WS2812B_driver is
 	);
 end entity;
 
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity NRZ_sequence is
+	generic (
+		duration_clk_counts : integer;
+		high_duration_clk_counts : integer
+	);
+	
+	port (
+		clk : in std_logic;
+		trigger : in std_logic;
+		finished : in std_logic
+	);
+
+end entity;
+
+architecture behavior of NRZ_sequence is
+begin
+end architecture;
+
 
 architecture beh of WS2812B_driver is
 	constant step_max : integer := 62;
@@ -60,6 +82,28 @@ architecture beh of WS2812B_driver is
 		end if;
 	end function;
 begin
+	NRZ_code_1 : entity work.NRZ_sequence
+		generic map(
+			duration_clk_counts => 62,
+			high_duration_clk_counts => 39
+		)
+		port map (
+			clk => clk,
+			trigger => '0', --todo,
+			finished => '0' --todo
+		);
+		
+	NRZ_code_0 : entity work.NRZ_sequence
+		generic map(
+			duration_clk_counts => 62,
+			high_duration_clk_counts => 19
+		)
+		port map (
+			clk => clk,
+			trigger => '0', --todo
+			finished => '0' --todo
+		);
+
 	process(clk)
 	begin
 		if rising_edge(clk) then
