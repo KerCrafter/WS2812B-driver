@@ -113,6 +113,7 @@ begin
 					seq_trigger <= '0';
 				
 					if enable = '1' then
+						seq_trigger <= '1';
 						stage <= SendLEDsData;
 					end if;		
 				when SendLEDsData =>
