@@ -34,7 +34,8 @@ entity NRZ_sequence is
 	port (
 		clk : in std_logic;
 		trigger : in std_logic;
-		finished : in std_logic
+		finished : in std_logic;
+		sequence : out std_logic
 	);
 
 end entity;
@@ -56,6 +57,12 @@ architecture beh of WS2812B_driver is
 	constant ValidateSeq : std_logic_vector(0 to 1) := "10";
 	
 	signal stage : std_logic_vector(0 to 1) := WaitStart;
+	
+	signal code_0_trigger : std_logic;
+	signal code_0_finished : std_logic;
+	signal code_0_sequence : std_logic;
+	
+	signal code_1_sequence : std_logic;
 	
 	
 	constant HIGH_DURATION_FOR_CODE_1 : integer := 39;
@@ -90,7 +97,8 @@ begin
 		port map (
 			clk => clk,
 			trigger => '0', --todo,
-			finished => '0' --todo
+			finished => '0', --todo
+			sequence => code_1_sequence
 		);
 		
 	NRZ_code_0 : entity work.NRZ_sequence
@@ -100,8 +108,9 @@ begin
 		)
 		port map (
 			clk => clk,
-			trigger => '0', --todo
-			finished => '0' --todo
+			trigger => code_0_trigger,
+			finished => code_0_finished,
+			sequence => code_0_sequence
 		);
 
 	process(clk)
