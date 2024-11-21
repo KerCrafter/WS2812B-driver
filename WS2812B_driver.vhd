@@ -155,6 +155,10 @@ begin
 						stage <= SendLEDsData;
 					end if;		
 				when SendLEDsData =>
+					if seq_trigger = '1' then 
+						seq_trigger <= '0';
+					end if;
+					
 					if step = step_max then
 						step <= 0;
 						
@@ -179,8 +183,7 @@ begin
 						end if;
 					else
 						step <= step + 1;
-						
-						seq_trigger <= '0';
+
 					end if;
 				
 				when ValidateSeq =>
