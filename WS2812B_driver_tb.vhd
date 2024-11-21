@@ -333,6 +333,11 @@ begin
 		program_red_intensity <= 10;
 		program_blue_intensity <= 0;
 		
+		wait until program_led_number = 3;
+		program_green_intensity <= 0;
+		program_red_intensity <= 0;
+		program_blue_intensity <= 0;
+		
 		wait for 170 ms;
 		
 		program_green_intensity <= 0;
@@ -532,6 +537,13 @@ begin
 		assert_serial_black_led_signal_should_sent;
 		assert_serial_white_led_signal_should_sent;
 		assert_serial_red_led_signal_should_sent;
+		
+		assert_next_black_leds_should_sent(5000 - 3);
+		
+		-- (Spec: RESET CODE should be LOW during >= 50us)
+		-- (50us => 50000 ns) / 20ns = 2500 clk edge
+		-- adding a little padding = 2500 + (1000 => 2us)
+		assert_should_maintain_LOW_state_during(2600);
 		
 		
 		wait until update_frame = '1';
