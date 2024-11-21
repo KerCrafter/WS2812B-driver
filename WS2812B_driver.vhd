@@ -160,8 +160,6 @@ begin
 						
 						if bit_proceed = bit_proceed_max then
 							bit_proceed <= 0;
-							seq_bit_to_code <= data(0);
-							seq_trigger <= '1';
 							
 							if program_led_number = max_pos-1 then
 								program_led_number <= 0;
@@ -169,6 +167,9 @@ begin
 								stage <= ValidateSeq;
 							else
 								program_led_number <= program_led_number + 1;
+								
+								seq_bit_to_code <= data(0);
+								seq_trigger <= '1';
 							end if;
 						else
 							seq_trigger <= '1';
