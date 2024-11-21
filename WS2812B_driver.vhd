@@ -47,12 +47,18 @@ end entity;
 architecture behavior of NRZ_sequence is
 	signal step : integer range 0 to duration_clk_counts := 0;
 	signal is_start : std_logic := '0';
+	
+	signal stim_start : std_logic;
 begin
 
-	process(trigger)
+	process(stim_start)
 	begin
-		if rising_edge(trigger) then
-			is_start <= '1';
+		if rising_edge(stim_start) then
+			if trigger = '1' then
+				is_start <= '1';
+			else
+				is_start <= '0';
+			end if;
 		end if;
 	end process;
 
@@ -63,14 +69,14 @@ begin
 			
 				if step = duration_clk_counts then
 					step <= 0;
-					--is_start <= '0';
 				else
 					step <= step + 1;
-					
 				end if;
 			end if;
 		end if;
 	end process;
+	
+	stim_start <= '1' when (is_start = '0' and trigger = '1') or (trigger = '0' and is_start = '1' and step = 0) else '0';
 
 	sequence <= '1' when ((bit_to_code = '0' and step <= 19) or (bit_to_code = '1' and step <= 39)) and is_start = '1' else '0';
 	
@@ -155,6 +161,7 @@ begin
 						if bit_proceed = bit_proceed_max then
 							bit_proceed <= 0;
 							seq_bit_to_code <= data(0);
+							seq_trigger <= '1';
 							
 							if program_led_number = max_pos-1 then
 								program_led_number <= 0;
@@ -180,6 +187,8 @@ begin
 						seq_trigger <= '1';
 
 						stage <= SendLEDsData;
+					else
+						seq_trigger <= '0';
 					end if;
 
 				when others =>
