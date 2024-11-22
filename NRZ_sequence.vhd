@@ -53,6 +53,6 @@ begin
 	
 	stim_start <= '1' when (is_start = '0' and trigger = '1') or (trigger = '0' and is_start = '1' and step = 0) else '0';
 
-	sequence <= '1' when ((bit_to_code = '0' and step <= 19) or (bit_to_code = '1' and step <= 39)) and is_start = '1' else '0';
+	sequence <= '1' when ((bit_to_code = '0' and step <= code_0_high_duration_clk_counts) or (bit_to_code = '1' and step <= code_1_high_duration_clk_counts)) and is_start = '1' else '0';
 	
 end architecture;
