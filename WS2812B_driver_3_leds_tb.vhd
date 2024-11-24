@@ -14,9 +14,9 @@ architecture behaviour of WS2812B_driver_3_leds_tb is
 	signal update_frame : std_logic;
 	
 	signal program_led_number : integer range 0 to num_leds-1;
-	signal program_green_intensity : integer range 0 to 255;
-	signal program_red_intensity : integer range 0 to 255;
-	signal program_blue_intensity : integer range 0 to 255;
+	signal program_green_intensity : std_logic_vector(7 downto 0);
+	signal program_red_intensity : std_logic_vector(7 downto 0);
+	signal program_blue_intensity : std_logic_vector(7 downto 0);
 
 	signal leds_line : std_logic;
 	signal seq_sequence : std_logic;
@@ -313,9 +313,9 @@ begin
 	
 	PLAYS_STIM: process
 	begin
-		program_green_intensity <= 0;
-		program_red_intensity <= 0;
-		program_blue_intensity <= 0;
+		program_green_intensity <= std_logic_vector(to_unsigned(0, 8));
+		program_red_intensity <= std_logic_vector(to_unsigned(0, 8));
+		program_blue_intensity <= std_logic_vector(to_unsigned(0, 8));
 		update_frame <= '0';
 		enable <= '0';
 		
@@ -323,14 +323,14 @@ begin
 		enable <= '1';
 		
 		wait until program_led_number = 1;
-		program_green_intensity <= 5;
-		program_red_intensity <= 5;
-		program_blue_intensity <= 5;
+		program_green_intensity <= std_logic_vector(to_unsigned(5, 8));
+		program_red_intensity <= std_logic_vector(to_unsigned(5, 8));
+		program_blue_intensity <= std_logic_vector(to_unsigned(5, 8));
 		
 		wait until program_led_number = 2;
-		program_green_intensity <= 0;
-		program_red_intensity <= 10;
-		program_blue_intensity <= 0;
+		program_green_intensity <= std_logic_vector(to_unsigned(0, 8));
+		program_red_intensity <= std_logic_vector(to_unsigned(10, 8));
+		program_blue_intensity <= std_logic_vector(to_unsigned(0, 8));
 		
 		wait;
 	end process;

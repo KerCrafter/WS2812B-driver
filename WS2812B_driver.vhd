@@ -17,9 +17,9 @@ entity WS2812B_driver is
 		update_frame : in std_logic;
 		
 		program_led_number : buffer integer range 0 to max_pos-1;
-		program_red_intensity : in integer range 0 to 255;
-		program_blue_intensity : in integer range 0 to 255;
-		program_green_intensity : in integer range 0 to 255
+		program_red_intensity : in std_logic_vector(7 downto 0);
+		program_blue_intensity : in std_logic_vector(7 downto 0);
+		program_green_intensity : in std_logic_vector(7 downto 0)
 	);
 end entity;
 
@@ -82,7 +82,7 @@ begin
 		variable data :  std_logic_vector(0 to bit_proceed_max);
 	begin
 	
-		data := std_logic_vector( to_unsigned( program_green_intensity, 8)) & std_logic_vector( to_unsigned( program_red_intensity, 8)) & std_logic_vector( to_unsigned( program_blue_intensity, 8));
+		data := program_green_intensity & program_red_intensity & program_blue_intensity;
 	
 		if rising_edge(clk) then
 			case stage is
