@@ -39,6 +39,9 @@ begin
 		wait for 50 ns; trigger <= '1';
 		wait for 50 ns; trigger <= '0';
 		
+		wait for 215 ns; trigger <= '1';
+		wait for 50 ns; trigger <= '0';
+		
 --		wait for 30 ns;
 --		bit_to_code <= '1';
 --		wait for 50 ns; trigger <= '1';
