@@ -30,11 +30,12 @@ architecture beh of WS2812B_driver is
 	signal step : integer range 0 to step_max;
 	signal bit_proceed : integer range 0 to bit_proceed_max;
 
-	constant WaitStart : std_logic_vector(0 to 1) := "00";
-	constant SendLEDsData : std_logic_vector(0 to 1) := "01";
-	constant ValidateSeq : std_logic_vector(0 to 1) := "10";
+	constant WaitTrigger : std_logic_vector(1 downto 0) := "00";
+	constant SendLEDsData : std_logic_vector(1 downto 0) := "01";
+	constant ValidateSeq : std_logic_vector(1 downto 0) := "10";
+	constant WaitTriggerRelease : std_logic_vector(1 downto 0) := "11";
 	
-	signal stage : std_logic_vector(0 to 1) := WaitStart;
+	signal stage : std_logic_vector(1 downto 0) := WaitTrigger;
 	
 	signal seq_trigger : std_logic;
 	signal seq_finished : std_logic;
@@ -86,7 +87,7 @@ begin
 	
 		if rising_edge(clk) then
 			case stage is
-				when WaitStart =>
+				when WaitTrigger =>
 					if enable = '1' or update_frame = '1' then
 						seq_trigger <= '1';
 						seq_bit_to_code <= data(bit_proceed);
@@ -123,20 +124,20 @@ begin
 						end if;
 					else
 						step <= step + 1;
-
 					end if;
 				
 				when ValidateSeq =>
-					if update_frame = '1' then
-						seq_trigger <= '1';
+					stage <= WaitTriggerRelease;
+					seq_trigger <= '0';
 
-						stage <= SendLEDsData;
-					else
-						seq_trigger <= '0';
+				when WaitTriggerRelease =>
+					if update_frame = '0' and enable = '0' then
+						stage <= WaitTrigger;
 					end if;
-
+					
 				when others =>
-					--nothing todo
+					-- nothing todo
+
 			end case;
 		end if;
 
