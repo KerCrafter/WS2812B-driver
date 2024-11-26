@@ -87,12 +87,12 @@ begin
 		if rising_edge(clk) then
 			case stage is
 				when WaitStart =>
-					seq_trigger <= '0';
-				
-					if enable = '1' then
+					if enable = '1' or update_frame = '1' then
 						seq_trigger <= '1';
 						seq_bit_to_code <= data(bit_proceed);
 						stage <= SendLEDsData;
+					else
+						seq_trigger <= '0';
 					end if;		
 				when SendLEDsData =>
 					if seq_trigger = '1' then 
