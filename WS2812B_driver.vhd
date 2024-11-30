@@ -12,8 +12,6 @@ entity WS2812B_driver is
 		enable : in std_logic;
 		leds_line : out std_logic := '0';
 		
-		seq_sequence : out std_logic := '0';
-		
 		update_frame : in std_logic;
 		
 		program_led_number : buffer integer range 0 to max_pos-1;

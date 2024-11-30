@@ -19,9 +19,7 @@ architecture behaviour of WS2812B_driver_tb is
 	signal program_red_intensity : std_logic_vector(7 downto 0);
 	signal program_blue_intensity : std_logic_vector(7 downto 0);
 
-	signal leds_line : std_logic;
-	signal seq_sequence : std_logic;
-	
+	signal leds_line : std_logic;	
 	
 	signal elapsed_clk_top : integer := 1;
 	
@@ -308,8 +306,7 @@ begin
 			
 			update_frame => update_frame,
 
-			leds_line => leds_line,
-			seq_sequence => seq_sequence
+			leds_line => leds_line
 		);
 	
 	PLAYS_STIM: process
