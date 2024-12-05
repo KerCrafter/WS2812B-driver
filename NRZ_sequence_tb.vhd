@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity NRZ_sequence_tb is
 end entity;
 
-architecture testbench of NRZ_sequence_tb is
+architecture simulation of NRZ_sequence_tb is
 	signal clk : std_logic;
 	signal trigger : std_logic;
 	signal finished : std_logic;

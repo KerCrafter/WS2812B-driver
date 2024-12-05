@@ -6,7 +6,7 @@ use std.env.finish;
 entity WS2812B_driver_tb is
 end entity;
 
-architecture behaviour of WS2812B_driver_tb is
+architecture simulation of WS2812B_driver_tb is
 	constant num_leds : integer := 5000;
 	
 	signal clk : std_logic;

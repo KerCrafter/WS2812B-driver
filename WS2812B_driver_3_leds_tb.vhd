@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity WS2812B_driver_3_leds_tb is
 end entity;
 
-architecture behaviour of WS2812B_driver_3_leds_tb is
+architecture simulation of WS2812B_driver_3_leds_tb is
 	constant num_leds : integer := 3;
 	
 	signal clk : std_logic;
