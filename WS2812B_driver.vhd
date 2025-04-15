@@ -27,6 +27,7 @@ architecture beh of WS2812B_driver is
 
   signal step : integer range 0 to step_max;
   signal bit_proceed : integer range 0 to bit_proceed_max;
+  signal reset_step : integer range 0 to 2600;
 
   constant WaitTrigger : std_logic_vector(1 downto 0) := "00";
   constant SendLEDsData : std_logic_vector(1 downto 0) := "01";
@@ -125,8 +126,13 @@ begin
           end if;
         
         when ValidateSeq =>
-          stage <= WaitTriggerRelease;
-          seq_trigger <= '0';
+          if reset_step = 2600 then
+            stage <= WaitTriggerRelease;
+            seq_trigger <= '0';
+            reset_step <= 0;
+          else
+            reset_step <= reset_step + 1;
+          end if;
 
         when WaitTriggerRelease =>
           if update_frame = '0' and enable = '0' then

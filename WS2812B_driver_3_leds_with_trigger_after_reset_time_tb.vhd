@@ -2,10 +2,10 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity WS2812B_driver_3_leds_tb is
+entity WS2812B_driver_3_leds_with_trigger_after_reset_time_tb is
 end entity;
 
-architecture simulation of WS2812B_driver_3_leds_tb is
+architecture simulation of WS2812B_driver_3_leds_with_trigger_after_reset_time_tb is
   constant num_leds : integer := 3;
   
   signal clk : std_logic;
@@ -362,16 +362,15 @@ begin
     assert_serial_black_led_signal_should_sent;
     assert_serial_white_led_signal_should_sent;
     assert_serial_red_led_signal_should_sent;
-    
-    -- Try trigger update frame, before RET time of 50us + 2us (security)
-    wait for 51 us;
+	 
+    -- Try trigger update frame, 50us + 2us (security)
+    wait for 53 us;
     update_frame <= '1';
     wait for 15 ns; update_frame <= '0';
 	 
-    -- (Spec: RESET CODE should be LOW during >= 50us)
-    -- (50us => 50000 ns) / 20ns = 2500 clk edge
-    -- adding a little padding = 2500 + (1000 => 2us)
-    assert_should_maintain_LOW_state_during(2600);
+    assert_serial_red_led_signal_should_sent;
+    assert_serial_red_led_signal_should_sent;
+    assert_serial_red_led_signal_should_sent;
 	 
     wait;
   end process;
