@@ -14,7 +14,7 @@ entity NRZ_sequence is
     trigger : in std_logic;
     finished : in std_logic;
     bit_to_code : in std_logic;
-    sequence : out std_logic := '0'
+    seq : out std_logic := '0'
   );
 
 end entity;
@@ -53,6 +53,6 @@ begin
   
   stim_start <= '1' when (is_start = '0' and trigger = '1') or (trigger = '0' and is_start = '1' and step = 0) else '0';
 
-  sequence <= '1' when ((bit_to_code = '0' and step <= code_0_high_duration_clk_counts) or (bit_to_code = '1' and step <= code_1_high_duration_clk_counts)) and is_start = '1' else '0';
+  seq <= '1' when ((bit_to_code = '0' and step <= code_0_high_duration_clk_counts) or (bit_to_code = '1' and step <= code_1_high_duration_clk_counts)) and is_start = '1' else '0';
   
 end architecture;

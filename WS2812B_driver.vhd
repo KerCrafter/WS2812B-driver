@@ -75,7 +75,7 @@ begin
       trigger => seq_trigger,
       finished => seq_finished,
       bit_to_code => seq_bit_to_code,
-      sequence => leds_line
+      seq => leds_line
     );
 
   process(clk)

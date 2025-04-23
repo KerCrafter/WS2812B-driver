@@ -10,7 +10,7 @@ architecture simulation of NRZ_sequence_tb is
   signal trigger : std_logic;
   signal finished : std_logic;
   signal bit_to_code : std_logic;
-  signal sequence : std_logic;
+  signal seq : std_logic;
 begin
   UUT: entity work.NRZ_sequence
     generic map(
@@ -23,7 +23,7 @@ begin
       trigger => trigger,
       finished => finished,
       bit_to_code => bit_to_code,
-      sequence => sequence
+      seq => seq
     );
     
   process
