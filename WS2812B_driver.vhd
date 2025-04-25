@@ -2,9 +2,25 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+package leds_program_co is
+  generic(N: integer := 109);
+
+  type leds_program_com is record
+      program_led_number : integer range 0 to N;
+      program_red_intensity : std_logic_vector(7 downto 0);
+      program_blue_intensity : std_logic_vector(7 downto 0);
+      program_green_intensity : std_logic_vector(7 downto 0);
+  end record;
+end package;
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
 entity WS2812B_driver is
   generic (
-    max_pos : integer := 16
+    max_pos : integer := 16;
+    package leds_program_c is new work.leds_program_co generic map (N => 109)
   );
   
   port (
@@ -17,8 +33,11 @@ entity WS2812B_driver is
     program_led_number : buffer integer range 0 to max_pos-1;
     program_red_intensity : in std_logic_vector(7 downto 0);
     program_blue_intensity : in std_logic_vector(7 downto 0);
-    program_green_intensity : in std_logic_vector(7 downto 0)
+    program_green_intensity : in std_logic_vector(7 downto 0) -- ; 
+
+    -- leds_program_com : inout leds_program_c.leds_program_com
   );
+
 end entity;
 
 architecture beh of WS2812B_driver is
