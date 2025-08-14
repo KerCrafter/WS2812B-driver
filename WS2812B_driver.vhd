@@ -9,7 +9,6 @@ entity WS2812B_driver is
   
   port (
     clk : in std_logic;
-    enable : in std_logic;
     leds_line : out std_logic := '0';
     
     update_frame : in std_logic;
@@ -87,7 +86,7 @@ begin
     if rising_edge(clk) then
       case stage is
         when WaitTrigger =>
-          if enable = '1' or update_frame = '1' then
+          if update_frame = '1' then
             seq_trigger <= '1';
             seq_bit_to_code <= data(bit_proceed);
             stage <= SendLEDsData;
@@ -135,7 +134,7 @@ begin
           end if;
 
         when WaitTriggerRelease =>
-          if update_frame = '0' and enable = '0' then
+          if update_frame = '0' then
             stage <= WaitTrigger;
           end if;
           

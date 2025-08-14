@@ -10,7 +10,6 @@ architecture simulation of WS2812B_driver_tb is
   constant num_leds : integer := 5000;
   
   signal clk : std_logic;
-  signal enable : std_logic;
   
   signal update_frame : std_logic;
   
@@ -297,7 +296,6 @@ begin
     generic map(max_pos => num_leds)
     port map (
       clk => clk,
-      enable => enable,
       
       program_led_number => program_led_number,
       program_green_intensity => program_green_intensity,
@@ -315,10 +313,9 @@ begin
     program_red_intensity <= std_logic_vector(to_unsigned(0, 8));
     program_blue_intensity <= std_logic_vector(to_unsigned(0, 8));
     update_frame <= '0';
-    enable <= '0';
     
     wait for 1 ms;
-    enable <= '1';
+    update_frame <= '1';
     
     wait until program_led_number = 1;
     program_green_intensity <= std_logic_vector(to_unsigned(5, 8));
@@ -519,8 +516,8 @@ begin
   begin
     assert leds_line = '0' report "Initialy should be low";
 
-    wait until enable = '1'; wait until clk = '1'; wait for 1 ps;
-    assert leds_line = '1' report "Just after enable, leds line should be high";
+    wait until update_frame = '1'; wait until clk = '1'; wait for 1 ps;
+    assert leds_line = '1' report "Just after update frame, leds line should be high";
     
     wait;
   end process;
