@@ -65,9 +65,9 @@ architecture beh of WS2812B_driver is
 begin
   NRZ_sequence : entity work.NRZ_sequence
     generic map(
-      duration_clk_counts => 62,
-      code_1_high_duration_clk_counts => 39,
-      code_0_high_duration_clk_counts => 19
+      DURATION_CLK_COUNTS => 62,
+      CODE_1_HIGH_DURATION_CLK_COUNTS => 39,
+      CODE_0_HIGH_DURATION_CLK_COUNTS => 19
     )
     port map (
       clk => clk,

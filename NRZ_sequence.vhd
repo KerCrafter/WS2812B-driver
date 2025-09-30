@@ -4,9 +4,9 @@ use ieee.numeric_std.all;
 
 entity NRZ_sequence is
   generic (
-    duration_clk_counts : integer;
-    code_0_high_duration_clk_counts : integer;
-    code_1_high_duration_clk_counts : integer
+    DURATION_CLK_COUNTS : integer;
+    CODE_0_HIGH_DURATION_CLK_COUNTS : integer;
+    CODE_1_HIGH_DURATION_CLK_COUNTS : integer
   );
   
   port (
@@ -20,7 +20,7 @@ entity NRZ_sequence is
 end entity;
 
 architecture behavior of NRZ_sequence is
-  signal step : integer range 0 to duration_clk_counts := 0;
+  signal step : integer range 0 to DURATION_CLK_COUNTS := 0;
   signal is_start : std_logic := '0';
   
   signal stim_start : std_logic;
@@ -42,7 +42,7 @@ begin
     if rising_edge(clk) then
       if is_start = '1' then
       
-        if step = duration_clk_counts then
+        if step = DURATION_CLK_COUNTS then
           step <= 0;
         else
           step <= step + 1;
@@ -53,6 +53,6 @@ begin
   
   stim_start <= '1' when (is_start = '0' and trigger = '1') or (trigger = '0' and is_start = '1' and step = 0) else '0';
 
-  seq <= '1' when ((bit_to_code = '0' and step <= code_0_high_duration_clk_counts) or (bit_to_code = '1' and step <= code_1_high_duration_clk_counts)) and is_start = '1' else '0';
+  seq <= '1' when ((bit_to_code = '0' and step <= CODE_0_HIGH_DURATION_CLK_COUNTS) or (bit_to_code = '1' and step <= CODE_1_HIGH_DURATION_CLK_COUNTS)) and is_start = '1' else '0';
   
 end architecture;
