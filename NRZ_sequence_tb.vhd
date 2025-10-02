@@ -8,7 +8,6 @@ end entity;
 architecture simulation of NRZ_sequence_tb is
   signal clk : std_logic;
   signal trigger : std_logic;
-  signal finished : std_logic;
   signal bit_to_code : std_logic;
   signal seq : std_logic;
 begin
@@ -21,7 +20,6 @@ begin
     port map(
       clk => clk,
       trigger => trigger,
-      finished => finished,
       bit_to_code => bit_to_code,
       seq => seq
     );
