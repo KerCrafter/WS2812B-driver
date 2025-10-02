@@ -36,7 +36,6 @@ architecture beh of WS2812B_driver is
   signal stage : std_logic_vector(1 downto 0) := WaitTrigger;
   
   signal seq_trigger : std_logic;
-  signal seq_finished : std_logic;
   signal seq_bit_to_code : std_logic;
   
   constant HIGH_DURATION_FOR_CODE_1 : integer := 39;
@@ -72,12 +71,11 @@ begin
     port map (
       clk => clk,
       trigger => seq_trigger,
-      finished => seq_finished,
       bit_to_code => seq_bit_to_code,
       seq => leds_line
     );
 
-  process(clk)
+  process(clk, program_green_intensity, program_red_intensity, program_blue_intensity)
     variable data :  std_logic_vector(0 to bit_proceed_max);
   begin
   
