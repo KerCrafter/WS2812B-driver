@@ -4,6 +4,7 @@ module NRZ_sequence #(
     parameter CODE_1_HIGH_DURATION_CLK_COUNTS = 39
 )(
     input  wire clk,
+    input  wire reset,
     input  wire trigger,
     input  wire bit_to_code,
     output reg  seq = 1'b0
@@ -12,10 +13,14 @@ module NRZ_sequence #(
     reg [$clog2(DURATION_CLK_COUNTS)-1:0] step = 0;
 
     always @(posedge clk) begin
-        if (trigger == 1'b1)
+        if (reset) begin
             step <= 0;
-        else if (step != DURATION_CLK_COUNTS)
-            step <= step + 1;
+        end else begin
+          if (trigger == 1'b1)
+              step <= 0;
+          else if (step != DURATION_CLK_COUNTS)
+              step <= step + 1;
+        end
     end
 
     always @(*) begin

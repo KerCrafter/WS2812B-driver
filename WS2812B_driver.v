@@ -2,6 +2,7 @@ module WS2812B_driver #(
     parameter MAX_POS = 16
 )(
     input  wire clk,
+    input  wire reset,
     output reg  leds_line = 1'b0,
     input  wire update_frame,
     output reg [$clog2(MAX_POS)-1:0] program_led_number = 0,
@@ -36,6 +37,7 @@ module WS2812B_driver #(
         .CODE_0_HIGH_DURATION_CLK_COUNTS(19)
     ) NRZ_sequence_inst (
         .clk(clk),
+        .reset(reset),
         .trigger(seq_trigger),
         .bit_to_code(seq_bit_to_code),
         .seq(seq_line)   // <--- on connecte ici le wire
@@ -46,58 +48,70 @@ module WS2812B_driver #(
         leds_line <= seq_line;
 
     always @(posedge clk) begin
-        case (stage)
-            WaitTrigger: begin
-                if (update_frame == 1'b1) begin
-                    seq_trigger <= 1'b1;
-                    seq_bit_to_code <= data_concat[bit_proceed_max - bit_proceed];
-                    stage <= SendLEDsData;
-                end else begin
-                    seq_trigger <= 1'b0;
-                end
-            end
 
-            SendLEDsData: begin
-                if (seq_trigger == 1'b1)
-                    seq_trigger <= 1'b0;
+        if (reset) begin
+            seq_trigger <= 1'b0;
+            seq_bit_to_code <= 0;
+            stage <= WaitTrigger;
+            step <= 0;
+            bit_proceed = 0;
+            reset_step = 0;
 
-                if (step == step_max) begin
-                    step <= 0;
-                    if (bit_proceed == bit_proceed_max) begin
-                        bit_proceed <= 0;
-                        if (program_led_number == MAX_POS - 1) begin
-                            program_led_number <= 0;
-                            stage <= ValidateSeq;
-                        end else begin
-                            program_led_number <= program_led_number + 1;
-                            seq_bit_to_code <= data_concat[bit_proceed_max];
-                            seq_trigger <= 1'b1;
-                        end
-                    end else begin
-                        seq_trigger <= 1'b1;
-                        bit_proceed <= bit_proceed + 1;
-                        seq_bit_to_code <= data_concat[bit_proceed_max - (bit_proceed + 1)];
-                    end
-                end else begin
-                    step <= step + 1;
-                end
-            end
+        end else begin
 
-            ValidateSeq: begin
-                if (reset_step == 2600) begin
-                    stage <= WaitTriggerRelease;
-                    seq_trigger <= 1'b0;
-                    reset_step <= 0;
-                end else begin
-                    reset_step <= reset_step + 1;
-                end
-            end
+          case (stage)
+              WaitTrigger: begin
+                  if (update_frame == 1'b1) begin
+                      seq_trigger <= 1'b1;
+                      seq_bit_to_code <= data_concat[bit_proceed_max - bit_proceed];
+                      stage <= SendLEDsData;
+                  end else begin
+                      seq_trigger <= 1'b0;
+                  end
+              end
 
-            WaitTriggerRelease: begin
-                if (update_frame == 1'b0)
-                    stage <= WaitTrigger;
-            end
-        endcase
+              SendLEDsData: begin
+                  if (seq_trigger == 1'b1)
+                      seq_trigger <= 1'b0;
+
+                  if (step == step_max) begin
+                      step <= 0;
+                      if (bit_proceed == bit_proceed_max) begin
+                          bit_proceed <= 0;
+                          if (program_led_number == MAX_POS - 1) begin
+                              program_led_number <= 0;
+                              stage <= ValidateSeq;
+                          end else begin
+                              program_led_number <= program_led_number + 1;
+                              seq_bit_to_code <= data_concat[bit_proceed_max];
+                              seq_trigger <= 1'b1;
+                          end
+                      end else begin
+                          seq_trigger <= 1'b1;
+                          bit_proceed <= bit_proceed + 1;
+                          seq_bit_to_code <= data_concat[bit_proceed_max - (bit_proceed + 1)];
+                      end
+                  end else begin
+                      step <= step + 1;
+                  end
+              end
+
+              ValidateSeq: begin
+                  if (reset_step == 2600) begin
+                      stage <= WaitTriggerRelease;
+                      seq_trigger <= 1'b0;
+                      reset_step <= 0;
+                  end else begin
+                      reset_step <= reset_step + 1;
+                  end
+              end
+
+              WaitTriggerRelease: begin
+                  if (update_frame == 1'b0)
+                      stage <= WaitTrigger;
+              end
+          endcase
+      end
     end
 
 endmodule
