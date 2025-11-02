@@ -54,8 +54,8 @@ module WS2812B_driver #(
             seq_bit_to_code <= 0;
             stage <= WaitTrigger;
             step <= 0;
-            bit_proceed = 0;
-            reset_step = 0;
+            bit_proceed <= 0;
+            reset_step <= 0;
 
         end else begin
 
