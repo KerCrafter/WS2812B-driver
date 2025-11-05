@@ -17,8 +17,6 @@ module WS2812B_driver #(
     localparam [1:0] SendLEDsData = 2'b01;
     localparam [1:0] ValidateSeq = 2'b10;
     localparam [1:0] WaitTriggerRelease = 2'b11;
-    localparam HIGH_DURATION_FOR_CODE_1 = 39;
-    localparam HIGH_DURATION_FOR_CODE_0 = 19;
 
     reg [$clog2(step_max)-1:0] step = 0;
     reg [$clog2(bit_proceed_max)-1:0] bit_proceed = 0;
@@ -82,17 +80,17 @@ module WS2812B_driver #(
                               program_led_number <= 0;
                               stage <= ValidateSeq;
                           end else begin
-                              program_led_number <= program_led_number + 1;
+                              program_led_number <= program_led_number + 1'd1;
                               seq_bit_to_code <= data_concat[bit_proceed_max];
                               seq_trigger <= 1'b1;
                           end
                       end else begin
                           seq_trigger <= 1'b1;
-                          bit_proceed <= bit_proceed + 1;
+                          bit_proceed <= bit_proceed + 1'd1;
                           seq_bit_to_code <= data_concat[bit_proceed_max - (bit_proceed + 1)];
                       end
                   end else begin
-                      step <= step + 1;
+                      step <= step + 1'd1;
                   end
               end
 
@@ -102,7 +100,7 @@ module WS2812B_driver #(
                       seq_trigger <= 1'b0;
                       reset_step <= 0;
                   end else begin
-                      reset_step <= reset_step + 1;
+                      reset_step <= reset_step + 1'd1;
                   end
               end
 

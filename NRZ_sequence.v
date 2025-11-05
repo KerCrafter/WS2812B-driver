@@ -19,7 +19,7 @@ module NRZ_sequence #(
           if (trigger == 1'b1)
               step <= 0;
           else if (step != DURATION_CLK_COUNTS)
-              step <= step + 1;
+              step <= step + 1'd1;
         end
     end
 
