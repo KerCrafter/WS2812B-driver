@@ -1,3 +1,5 @@
+`default_nettype none
+
 module pipe_tri_bus (
     input  wire enable,
     input  wire [7:0] i_led_green_intensity,

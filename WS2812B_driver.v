@@ -1,3 +1,5 @@
+`default_nettype none
+
 module WS2812B_driver #(
     parameter MAX_POS = 16
 )(
@@ -41,10 +43,6 @@ module WS2812B_driver #(
         .seq(seq_line)   // <--- on connecte ici le wire
     );
 
-    // leds_line suit la sortie de la séquence
-    always @(posedge clk)
-        leds_line <= seq_line;
-
     always @(posedge clk) begin
 
         if (reset) begin
@@ -54,8 +52,10 @@ module WS2812B_driver #(
             step <= 0;
             bit_proceed <= 0;
             reset_step <= 0;
+            leds_line <= 0;
 
         end else begin
+          leds_line <= seq_line;
 
           case (stage)
               WaitTrigger: begin

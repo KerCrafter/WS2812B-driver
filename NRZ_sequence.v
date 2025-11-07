@@ -1,3 +1,5 @@
+`default_nettype none
+
 module NRZ_sequence #(
     parameter DURATION_CLK_COUNTS = 62,
     parameter CODE_0_HIGH_DURATION_CLK_COUNTS = 19,
