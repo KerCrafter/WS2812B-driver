@@ -13,7 +13,6 @@ module WS2812B_driver #(
     input  wire [7:0] program_green_intensity
 );
 
-    localparam [$clog2(MAX_POS)-1:0] maxpos = MAX_POS[$clog2(MAX_POS)-1:0];
     localparam [5:0] step_max = 62;
     localparam [11:0] reset_step_max = 2600;
     localparam [4:0] bit_proceed_max = 23;
@@ -78,7 +77,7 @@ module WS2812B_driver #(
                       step <= 0;
                       if (bit_proceed == bit_proceed_max) begin
                           bit_proceed <= 0;
-                          if (program_led_number == maxpos - 1) begin
+                          if (program_led_number == MAX_POS - 1) begin
                               program_led_number <= 0;
                               stage <= ValidateSeq;
                           end else begin
