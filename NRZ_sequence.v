@@ -20,7 +20,7 @@ module NRZ_sequence #(
         end else begin
           if (trigger == 1'b1)
               step <= 0;
-          else if (step != DURATION_CLK_COUNTS)
+          else if (step != DURATION_CLK_COUNTS[$clog2(DURATION_CLK_COUNTS)-1:0])
               step <= step + 1'd1;
         end
     end
