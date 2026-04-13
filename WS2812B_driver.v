@@ -13,17 +13,18 @@ module WS2812B_driver #(
     input  wire [7:0] program_green_intensity
 );
 
-    localparam step_max = 62;
-    localparam reset_step_max = 2600;
-    localparam bit_proceed_max = 23;
+    localparam [$clog2(MAX_POS)-1:0] maxpos = MAX_POS[$clog2(MAX_POS)-1:0];
+    localparam [5:0] step_max = 62;
+    localparam [11:0] reset_step_max = 2600;
+    localparam [4:0] bit_proceed_max = 23;
     localparam [1:0] WaitTrigger = 2'b00;
     localparam [1:0] SendLEDsData = 2'b01;
     localparam [1:0] ValidateSeq = 2'b10;
     localparam [1:0] WaitTriggerRelease = 2'b11;
 
-    reg [$clog2(step_max)-1:0] step = 0;
-    reg [$clog2(bit_proceed_max)-1:0] bit_proceed = 0;
-    reg [$clog2(reset_step_max)-1:0] reset_step = 0;
+    reg [5:0] step = 0;
+    reg [4:0] bit_proceed = 0;
+    reg [11:0] reset_step = 0;
     reg [1:0] stage = WaitTrigger;
     reg seq_trigger;
     reg seq_bit_to_code;
@@ -77,7 +78,7 @@ module WS2812B_driver #(
                       step <= 0;
                       if (bit_proceed == bit_proceed_max) begin
                           bit_proceed <= 0;
-                          if (program_led_number == MAX_POS - 1) begin
+                          if (program_led_number == maxpos - 1) begin
                               program_led_number <= 0;
                               stage <= ValidateSeq;
                           end else begin
